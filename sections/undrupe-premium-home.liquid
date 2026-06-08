@@ -1,0 +1,408 @@
+{{ 'section-undrupe-premium-home.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
+
+{%- liquid
+  assign featured_collection = section.settings.featured_collection
+  assign hero_alt = section.settings.hero_image.alt | default: shop.name | escape
+  assign editorial_alt = section.settings.editorial_image.alt | default: shop.name | escape
+-%}
+
+<section class="undrupe-home color-{{ section.settings.color_scheme }} gradient">
+  <div class="undrupe-hero page-width">
+    <div class="undrupe-hero__copy">
+      {%- if section.settings.kicker != blank -%}
+        <p class="undrupe-eyebrow">{{ section.settings.kicker | escape }}</p>
+      {%- endif -%}
+
+      <h1 class="undrupe-hero__heading">{{ section.settings.heading }}</h1>
+
+      {%- if section.settings.body != blank -%}
+        <div class="undrupe-hero__text rte">{{ section.settings.body }}</div>
+      {%- endif -%}
+
+      <div class="undrupe-hero__actions">
+        {%- if section.settings.primary_label != blank -%}
+          <a
+            class="button button--primary undrupe-button"
+            {% if section.settings.primary_link == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.primary_link }}"
+            {% endif %}
+          >
+            {{ section.settings.primary_label | escape }}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.secondary_label != blank -%}
+          <a
+            class="button button--secondary undrupe-button undrupe-button--ghost"
+            {% if section.settings.secondary_link == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.secondary_link }}"
+            {% endif %}
+          >
+            {{ section.settings.secondary_label | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <dl class="undrupe-proof">
+        <div>
+          <dt>Premium</dt>
+          <dd>Handpicked essentials</dd>
+        </div>
+        <div>
+          <dt>Secure</dt>
+          <dd>Protected checkout</dd>
+        </div>
+        <div>
+          <dt>Fast</dt>
+          <dd>Worldwide delivery</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="undrupe-hero__visual" aria-label="Undrupe featured product">
+      <div class="undrupe-hero__image-card">
+        {%- if section.settings.hero_image != blank -%}
+          {{
+            section.settings.hero_image
+            | image_url: width: 1800
+            | image_tag:
+              class: 'undrupe-hero__image',
+              loading: 'eager',
+              fetchpriority: 'high',
+              alt: hero_alt
+          }}
+        {%- else -%}
+          <img
+            class="undrupe-hero__image"
+            src="{{ 'undrupe-hero-product.png' | asset_url }}"
+            alt="Undrupe premium organizer detail"
+            loading="eager"
+            fetchpriority="high"
+            width="1248"
+            height="832"
+          >
+        {%- endif -%}
+      </div>
+      <div class="undrupe-floating undrupe-floating--top">
+        <span>Premium</span>
+        <strong>Handpicked essentials</strong>
+      </div>
+      <div class="undrupe-floating undrupe-floating--bottom">
+        <span>Trusted</span>
+        <strong>Quality checked</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="undrupe-trust page-width" aria-label="Store benefits">
+    <div>
+      <span>01</span>
+      <strong>Useful first</strong>
+      <p>Products chosen for real routines, not shelf clutter.</p>
+    </div>
+    <div>
+      <span>02</span>
+      <strong>Clean quality</strong>
+      <p>Simple finishes, durable details, and easy gifting.</p>
+    </div>
+    <div>
+      <span>03</span>
+      <strong>Fair value</strong>
+      <p>Elevated essentials without the boutique markup.</p>
+    </div>
+  </div>
+
+  <div class="undrupe-featured page-width">
+    <div class="undrupe-section-heading">
+      <p class="undrupe-eyebrow">Trending now</p>
+      <h2>{{ section.settings.featured_heading | escape }}</h2>
+      {%- if section.settings.featured_link_label != blank -%}
+        <a
+          {% if section.settings.featured_link == blank %}
+            role="link" aria-disabled="true"
+          {% else %}
+            href="{{ section.settings.featured_link }}"
+          {% endif %}
+        >
+          {{ section.settings.featured_link_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if featured_collection != blank and featured_collection.products_count > 0 -%}
+      <ul class="grid product-grid grid--2-col-tablet-down grid--4-col-desktop undrupe-product-grid" role="list">
+        {%- for product in featured_collection.products limit: section.settings.products_to_show -%}
+          <li class="grid__item">
+            {% render 'card-product',
+              card_product: product,
+              media_aspect_ratio: 'portrait',
+              image_shape: 'default',
+              show_secondary_image: true,
+              show_vendor: false,
+              show_rating: false,
+              lazy_load: true,
+              quick_add: section.settings.quick_add,
+              section_id: section.id
+            %}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <div class="undrupe-placeholder-grid">
+        <article>
+          <span>Home</span>
+          <h3>Cable and desk organizers</h3>
+          <p>Clean up the everyday surfaces customers see first.</p>
+        </article>
+        <article>
+          <span>Tech</span>
+          <h3>Smart charging essentials</h3>
+          <p>Small tools that make phones, desks, and travel easier.</p>
+        </article>
+        <article>
+          <span>Care</span>
+          <h3>Hard-to-reach cleaning tools</h3>
+          <p>Practical problem solvers with a polished presentation.</p>
+        </article>
+        <article>
+          <span>Living</span>
+          <h3>Storage that looks intentional</h3>
+          <p>Useful pieces that belong in a modern home.</p>
+        </article>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="undrupe-solutions page-width">
+    <div class="undrupe-section-heading undrupe-section-heading--center">
+      <p class="undrupe-eyebrow">Shop by need</p>
+      <h2>Everyday problems, solved cleanly.</h2>
+    </div>
+
+    <div class="undrupe-solution-grid">
+      {%- for block in section.blocks -%}
+        <a
+          class="undrupe-solution"
+          {% if block.settings.link == blank %}
+            role="link" aria-disabled="true"
+          {% else %}
+            href="{{ block.settings.link }}"
+          {% endif %}
+          {{ block.shopify_attributes }}
+        >
+          <span>{{ forloop.index | prepend: '0' }}</span>
+          <h3>{{ block.settings.heading | escape }}</h3>
+          <p>{{ block.settings.text | escape }}</p>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="undrupe-editorial page-width">
+    <div class="undrupe-editorial__image">
+      {%- if section.settings.editorial_image != blank -%}
+        {{
+          section.settings.editorial_image
+          | image_url: width: 1800
+          | image_tag:
+            loading: 'lazy',
+            alt: editorial_alt
+        }}
+      {%- else -%}
+        <img
+          src="{{ 'undrupe-editorial-home.jpg' | asset_url }}"
+          alt="Minimal home setting curated by Undrupe"
+          loading="lazy"
+          width="2000"
+          height="788"
+        >
+      {%- endif -%}
+    </div>
+    <div class="undrupe-editorial__copy">
+      <p class="undrupe-eyebrow">The Undrupe edit</p>
+      <h2>Premium essentials for modern living.</h2>
+      <p>
+        Every product at Undrupe is selected for usefulness, quality, and design. No clutter, no gimmicks—just smart essentials that improve everyday life.
+      </p>
+      <a class="button button--primary undrupe-button" href="{{ routes.collections_url }}">Explore collections</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Undrupe premium home",
+  "tag": "section",
+  "class": "section section-undrupe-premium-home",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Curated everyday essentials"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Upgrade everyday living."
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body",
+      "default": "<p>Discover premium home, tech, pet, and lifestyle essentials selected to simplify daily life and elevate your space.</p>"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Shop Collection"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Best Sellers"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Featured collection"
+    },
+    {
+      "type": "text",
+      "id": "featured_heading",
+      "label": "Featured heading",
+      "default": "Customer Favorites"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 8,
+      "step": 1,
+      "default": 4,
+      "label": "Products to show"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "default": "standard",
+      "label": "Quick add",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "featured_link_label",
+      "label": "Featured link label",
+      "default": "Shop all"
+    },
+    {
+      "type": "url",
+      "id": "featured_link",
+      "label": "Featured link"
+    },
+    {
+      "type": "image_picker",
+      "id": "editorial_image",
+      "label": "Editorial image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "solution",
+      "name": "Solution card",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Organize the messy corner"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Compact tools for cleaner counters, drawers, desks, and entryways."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Undrupe premium home",
+      "blocks": [
+        {
+          "type": "solution",
+          "settings": {
+            "heading": "Tame cables and counters",
+            "text": "Small organizers that make busy spaces feel immediately cleaner."
+          }
+        },
+        {
+          "type": "solution",
+          "settings": {
+            "heading": "Upgrade daily routines",
+            "text": "Useful tech, home, and lifestyle finds that earn their place."
+          }
+        },
+        {
+          "type": "solution",
+          "settings": {
+            "heading": "Gift better essentials",
+            "text": "Polished everyday products that feel thoughtful without overthinking."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

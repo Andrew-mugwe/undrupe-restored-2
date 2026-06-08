@@ -1,0 +1,57 @@
+{
+  "sections": {
+    "undrupe-premium-home": {
+      "type": "undrupe-premium-home",
+      "blocks": {
+        "solution-1": {
+          "type": "solution",
+          "settings": {
+            "heading": "Tame cables and counters",
+            "text": "Small organizers that make busy spaces feel immediately cleaner.",
+            "link": "shopify://collections/all"
+          }
+        },
+        "solution-2": {
+          "type": "solution",
+          "settings": {
+            "heading": "Upgrade daily routines",
+            "text": "Useful tech, home, and lifestyle finds that earn their place.",
+            "link": "shopify://collections/all"
+          }
+        },
+        "solution-3": {
+          "type": "solution",
+          "settings": {
+            "heading": "Gift better essentials",
+            "text": "Polished everyday products that feel thoughtful without overthinking.",
+            "link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "solution-1",
+        "solution-2",
+        "solution-3"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "kicker": "Curated everyday essentials",
+        "heading": "Smart essentials, beautifully chosen.",
+        "body": "<p>Undrupe brings together clever home, tech, and lifestyle finds that make daily routines feel cleaner, easier, and more intentional.</p>",
+        "primary_label": "Shop new arrivals",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "View all products",
+        "secondary_link": "shopify://collections/all",
+        "featured_collection": "all",
+        "featured_heading": "Most wanted this week",
+        "products_to_show": 4,
+        "quick_add": "standard",
+        "featured_link_label": "Shop all",
+        "featured_link": "shopify://collections/all"
+      }
+    }
+  },
+  "order": [
+    "undrupe-premium-home"
+  ]
+}
