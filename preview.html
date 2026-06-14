@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en" class="js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Undrupe — Premium Store Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --page-width: 140rem;
+      --font-body-family: 'Inter', sans-serif;
+      --font-heading-family: 'Hanken Grotesk', sans-serif;
+      --font-body-scale: 1;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 62.5%; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body-family);
+      font-size: 1.6rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #f6f5f0;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; }
+
+    /* ===== PREMIUM HEADER ===== */
+    .preview-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(246,245,240,0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(228,226,218,0.6);
+      transition: all 0.3s ease;
+    }
+    .preview-header.scrolled {
+      background: rgba(246,245,240,0.95);
+      box-shadow: 0 0.2rem 2rem rgba(0,0,0,0.04);
+    }
+    .preview-header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 auto;
+      max-width: var(--page-width);
+      padding: 1.6rem 2.4rem;
+    }
+    .preview-logo {
+      font-family: var(--font-heading-family);
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      text-decoration: none;
+    }
+    .preview-logo span {
+      color: #3a5a40;
+    }
+    .preview-nav {
+      display: flex;
+      align-items: center;
+      gap: 3.2rem;
+      list-style: none;
+    }
+    .preview-nav a {
+      color: #3d3d3d;
+      font-size: 1.35rem;
+      font-weight: 600;
+      text-decoration: none;
+      position: relative;
+      padding: 0.4rem 0;
+      transition: color 0.2s;
+    }
+    .preview-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #3a5a40;
+      border-radius: 1px;
+      transition: width 0.3s ease;
+    }
+    .preview-nav a:hover { color: #1a1a1a; }
+    .preview-nav a:hover::after { width: 100%; }
+    .preview-header__actions {
+      display: flex;
+      align-items: center;
+      gap: 1.6rem;
+    }
+    .preview-cart-btn {
+      align-items: center;
+      background: #1a1a1a;
+      border: none;
+      border-radius: 999px;
+      color: #fff;
+      cursor: pointer;
+      display: inline-flex;
+      font-family: var(--font-body-family);
+      font-size: 1.25rem;
+      font-weight: 700;
+      gap: 0.8rem;
+      padding: 1rem 2rem;
+      transition: all 0.3s ease;
+    }
+    .preview-cart-btn:hover {
+      background: #3a5a40;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(58,90,64,0.2);
+    }
+    .preview-cart-badge {
+      background: #c2a462;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 800;
+      height: 1.8rem;
+      line-height: 1.8rem;
+      text-align: center;
+      width: 1.8rem;
+    }
+
+    /* Mobile header */
+    .preview-menu-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: none;
+      padding: 0.4rem;
+    }
+    .preview-menu-btn svg { display: block; }
+    @media (max-width: 768px) {
+      .preview-nav { display: none; }
+      .preview-menu-btn { display: block; }
+    }
+
+    /* ===== PREMIUM FOOTER ===== */
+    .preview-footer {
+      background: #1a1a1a;
+      color: rgba(255,255,255,0.7);
+      margin-top: 0;
+      padding: 8rem 2.4rem 3.2rem;
+    }
+    .preview-footer__inner {
+      display: grid;
+      gap: 4rem;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      margin: 0 auto;
+      max-width: var(--page-width);
+    }
+    .preview-footer__brand h3 {
+      color: #fff;
+      font-family: var(--font-heading-family);
+      font-size: 2.4rem;
+      font-weight: 900;
+      margin-bottom: 1.6rem;
+    }
+    .preview-footer__brand h3 span { color: #588157; }
+    .preview-footer__brand p {
+      color: rgba(255,255,255,0.5);
+      font-size: 1.4rem;
+      line-height: 1.7;
+      max-width: 32rem;
+    }
+    .preview-footer__col h4 {
+      color: #fff;
+      font-family: var(--font-heading-family);
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+    }
+    .preview-footer__col ul {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      list-style: none;
+    }
+    .preview-footer__col a {
+      color: rgba(255,255,255,0.5);
+      font-size: 1.4rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .preview-footer__col a:hover { color: #fff; }
+    .preview-footer__bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      margin: 6rem auto 0;
+      max-width: var(--page-width);
+      padding-top: 2.4rem;
+    }
+    .preview-footer__bottom p {
+      color: rgba(255,255,255,0.3);
+      font-size: 1.2rem;
+    }
+    .preview-footer__social {
+      display: flex;
+      gap: 1.6rem;
+    }
+    .preview-footer__social a {
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      color: rgba(255,255,255,0.4);
+      display: flex;
+      height: 3.6rem;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.3s;
+      width: 3.6rem;
+    }
+    .preview-footer__social a:hover {
+      background: #3a5a40;
+      border-color: #3a5a40;
+      color: #fff;
+    }
+    @media (max-width: 768px) {
+      .preview-footer__inner { grid-template-columns: 1fr; }
+      .preview-footer__bottom { flex-direction: column; gap: 1.6rem; }
+    }
+
+    /* ===== PAGE STRUCTURE ===== */
+    .page-width { max-width: var(--page-width); margin: 0 auto; padding: 0 1.5rem; }
+
+    /* Grid system for product cards */
+    .grid { display: grid; gap: 2rem; list-style: none; padding: 0; }
+    .grid--4-col-desktop { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid--2-col-tablet-down { }
+    @media (max-width: 989px) {
+      .grid--4-col-desktop { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 575px) {
+      .grid--4-col-desktop { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Card structure for preview */
+    .card-wrapper { perspective: 1200px; }
+    .card {
+      background: #fff;
+      border: 1px solid #e4e2da;
+      border-radius: 1.6rem;
+      overflow: hidden;
+      transition: all 0.45s cubic-bezier(0.4,0,0.2,1);
+      transform-style: preserve-3d;
+    }
+    .card:hover {
+      border-color: rgba(58,90,64,0.2);
+      box-shadow: 0 1.6rem 4.8rem rgba(0,0,0,0.08), 0 0 3rem rgba(58,90,64,0.18);
+      transform: translateY(-0.6rem);
+    }
+    .card__media {
+      aspect-ratio: 3/4;
+      background: #f0efe8;
+      overflow: hidden;
+      position: relative;
+    }
+    .card__media img {
+      display: block;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      width: 100%;
+      transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .card:hover .card__media img { transform: scale(1.08); }
+    .card__content { padding: 1.8rem 2rem 2rem; }
+    .card__heading {
+      font-family: var(--font-heading-family);
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .card__heading a { text-decoration: none; color: #1a1a1a; }
+    .card__price {
+      color: #3a5a40;
+      font-family: var(--font-heading-family);
+      font-weight: 800;
+      font-size: 1.5rem;
+      margin-top: 0.6rem;
+    }
+    .card__badge {
+      background: #3a5a40;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      left: 1.2rem;
+      letter-spacing: 0.04em;
+      padding: 0.4rem 1rem;
+      position: absolute;
+      text-transform: uppercase;
+      top: 1.2rem;
+    }
+    .card__add-btn {
+      background: #1a1a1a;
+      border: none;
+      border-radius: 1.2rem;
+      color: #fff;
+      cursor: pointer;
+      font-family: var(--font-body-family);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 1.2rem;
+      padding: 1.2rem;
+      width: 100%;
+      transition: all 0.3s;
+    }
+    .card__add-btn:hover {
+      background: #3a5a40;
+      box-shadow: 0 0.4rem 1.6rem rgba(58,90,64,0.2);
+      transform: translateY(-2px);
+    }
+  </style>
+  <link rel="stylesheet" href="assets/section-undrupe-premium-home.css">
+</head>
+<body>
+
+  <!-- PREMIUM HEADER -->
+  <header class="preview-header" id="previewHeader">
+    <div class="preview-header__inner">
+      <a href="#" class="preview-logo">un<span>drupe</span></a>
+      <ul class="preview-nav">
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Collections</a></li>
+        <li><a href="#">Best Sellers</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+      <div class="preview-header__actions">
+        <button class="preview-menu-btn" aria-label="Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <button class="preview-cart-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          Cart
+          <span class="preview-cart-badge">2</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT — Premium Home Section -->
+  <main>
+    <section class="section section-undrupe-premium-home">
+      <div class="undrupe-home" id="undrupe-home">
+
+        <!-- ===== HERO ===== -->
+        <div class="undrupe-hero page-width">
+          <div class="undrupe-hero__copy">
+            <p class="undrupe-eyebrow u-reveal u-delay-1">Curated everyday essentials</p>
+            <h1 class="undrupe-hero__heading">Smart essentials, beautifully chosen.</h1>
+            <div class="undrupe-hero__text u-reveal u-delay-2 rte">
+              <p>Undrupe brings together clever home, tech, and lifestyle finds that make daily routines feel cleaner, easier, and more intentional.</p>
+            </div>
+            <div class="undrupe-hero__actions u-reveal u-delay-3">
+              <a class="button button--primary undrupe-button" href="#">
+                Shop new arrivals
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-left:4px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a class="button button--secondary undrupe-button undrupe-button--ghost" href="#">
+                View all products
+              </a>
+            </div>
+            <dl class="undrupe-proof u-reveal u-delay-4">
+              <div><dt>Premium</dt><dd>Handpicked essentials</dd></div>
+              <div><dt>Secure</dt><dd>Protected checkout</dd></div>
+              <div><dt>Fast</dt><dd>Worldwide delivery</dd></div>
+            </dl>
+          </div>
+          <div class="undrupe-hero__visual" aria-hidden="true">
+            <div class="undrupe-hero__image-card">
+              <img class="undrupe-hero__image" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1800&q=80" alt="Premium modern home interior" loading="eager" width="1800" height="1200">
+            </div>
+            <div class="undrupe-floating undrupe-floating--top">
+              <span>Premium</span>
+              <strong>Handpicked essentials</strong>
+            </div>
+            <div class="undrupe-floating undrupe-floating--bottom">
+              <span>Trusted</span>
+              <strong>Quality checked</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== MARQUEE ===== -->
+        <div class="undrupe-marquee" aria-hidden="true">
+          <div class="undrupe-marquee__track">
+            <span class="undrupe-marquee__item">Free Shipping on $50+</span>
+            <span class="undrupe-marquee__item">Premium Curated Products</span>
+            <span class="undrupe-marquee__item">30-Day Easy Returns</span>
+            <span class="undrupe-marquee__item">Eco-Conscious Packaging</span>
+            <span class="undrupe-marquee__item">Trusted by 10,000+ Customers</span>
+            <span class="undrupe-marquee__item">New Arrivals Weekly</span>
+            <span class="undrupe-marquee__item">Quality Guaranteed</span>
+            <span class="undrupe-marquee__item">Secure Checkout</span>
+            <span class="undrupe-marquee__item">Free Shipping on $50+</span>
+            <span class="undrupe-marquee__item">Premium Curated Products</span>
+            <span class="undrupe-marquee__item">30-Day Easy Returns</span>
+            <span class="undrupe-marquee__item">Eco-Conscious Packaging</span>
+            <span class="undrupe-marquee__item">Trusted by 10,000+ Customers</span>
+            <span class="undrupe-marquee__item">New Arrivals Weekly</span>
+            <span class="undrupe-marquee__item">Quality Guaranteed</span>
+            <span class="undrupe-marquee__item">Secure Checkout</span>
+          </div>
+        </div>
+
+        <!-- ===== TRUST BAR ===== -->
+        <div class="undrupe-trust page-width" aria-label="Store benefits">
+          <div class="u-reveal u-delay-1">
+            <span>01</span>
+            <strong>Useful first</strong>
+            <p>Products chosen for real routines, not shelf clutter.</p>
+          </div>
+          <div class="u-reveal u-delay-2">
+            <span>02</span>
+            <strong>Clean quality</strong>
+            <p>Simple finishes, durable details, and easy gifting.</p>
+          </div>
+          <div class="u-reveal u-delay-3">
+            <span>03</span>
+            <strong>Fair value</strong>
+            <p>Elevated essentials without the boutique markup.</p>
+          </div>
+        </div>
+
+        <!-- ===== FEATURED PRODUCTS ===== -->
+        <div class="undrupe-featured page-width">
+          <div class="undrupe-section-heading u-reveal">
+            <div>
+              <p class="undrupe-eyebrow">Trending now</p>
+              <h2>Most wanted this week</h2>
+            </div>
+            <a href="#">Shop all</a>
+          </div>
+
+          <ul class="grid grid--2-col-tablet-down grid--4-col-desktop undrupe-product-grid" role="list">
+            <!-- Product 1 - Square image -->
+            <li class="grid__item">
+              <div class="card-wrapper">
+                <div class="card">
+                  <div class="card__media">
+                    <span class="card__badge">New</span>
+                    <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&h=800&fit=crop&q=80" alt="Premium water bottle" loading="lazy" width="600" height="800">
+                  </div>
+                  <div class="card__content">
+                    <h3 class="card__heading"><a href="#">Minimal Insulated Bottle</a></h3>
+                    <div class="card__price">$34.99</div>
+                    <button class="card__add-btn">Add to Cart</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <!-- Product 2 - Landscape image -->
+            <li class="grid__item">
+              <div class="card-wrapper">
+                <div class="card">
+                  <div class="card__media">
+                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=800&fit=crop&q=80" alt="Premium watch" loading="lazy" width="600" height="800">
+                  </div>
+                  <div class="card__content">
+                    <h3 class="card__heading"><a href="#">Classic Leather Watch</a></h3>
+                    <div class="card__price">$89.00</div>
+                    <button class="card__add-btn">Add to Cart</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <!-- Product 3 - Portrait image -->
+            <li class="grid__item">
+              <div class="card-wrapper">
+                <div class="card">
+                  <div class="card__media">
+                    <span class="card__badge">Popular</span>
+                    <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&h=800&fit=crop&q=80" alt="Premium sneakers" loading="lazy" width="600" height="800">
+                  </div>
+                  <div class="card__content">
+                    <h3 class="card__heading"><a href="#">Heritage Running Sneaker</a></h3>
+                    <div class="card__price">$120.00</div>
+                    <button class="card__add-btn">Add to Cart</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <!-- Product 4 - Wide image -->
+            <li class="grid__item">
+              <div class="card-wrapper">
+                <div class="card">
+                  <div class="card__media">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=800&fit=crop&q=80" alt="Premium headphones" loading="lazy" width="600" height="800">
+                  </div>
+                  <div class="card__content">
+                    <h3 class="card__heading"><a href="#">Studio Wireless Headphones</a></h3>
+                    <div class="card__price">$199.00</div>
+                    <button class="card__add-btn">Add to Cart</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- ===== STATS BAR ===== -->
+        <div class="undrupe-stats page-width">
+          <div class="undrupe-stats__grid">
+            <div class="undrupe-stat u-reveal u-delay-1">
+              <span class="undrupe-stat__number" data-count-to="10000" data-count-suffix="+">0</span>
+              <span class="undrupe-stat__label">Happy Customers</span>
+            </div>
+            <div class="undrupe-stat u-reveal u-delay-2">
+              <span class="undrupe-stat__number" data-count-to="500" data-count-suffix="+">0</span>
+              <span class="undrupe-stat__label">Products Curated</span>
+            </div>
+            <div class="undrupe-stat u-reveal u-delay-3">
+              <span class="undrupe-stat__number" data-count-to="48" data-count-suffix="">0</span>
+              <span class="undrupe-stat__label">Countries Shipped</span>
+            </div>
+            <div class="undrupe-stat u-reveal u-delay-4">
+              <span class="undrupe-stat__number" data-count-to="99" data-count-suffix="%">0</span>
+              <span class="undrupe-stat__label">Satisfaction Rate</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== SOLUTIONS ===== -->
+        <div class="undrupe-solutions page-width">
+          <div class="undrupe-section-heading undrupe-section-heading--center u-reveal">
+            <p class="undrupe-eyebrow">Shop by need</p>
+            <h2>Everyday problems, solved cleanly.</h2>
+          </div>
+          <div class="undrupe-solution-grid">
+            <a class="undrupe-solution" href="#">
+              <span>01</span>
+              <h3>Tame cables and counters</h3>
+              <p>Small organizers that make busy spaces feel immediately cleaner.</p>
+            </a>
+            <a class="undrupe-solution" href="#">
+              <span>02</span>
+              <h3>Upgrade daily routines</h3>
+              <p>Useful tech, home, and lifestyle finds that earn their place.</p>
+            </a>
+            <a class="undrupe-solution" href="#">
+              <span>03</span>
+              <h3>Gift better essentials</h3>
+              <p>Polished everyday products that feel thoughtful without overthinking.</p>
+            </a>
+          </div>
+        </div>
+
+        <!-- ===== EDITORIAL ===== -->
+        <div class="undrupe-editorial page-width">
+          <div class="undrupe-editorial__image u-reveal-scale">
+            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1800&q=80" alt="Minimal home setting" loading="lazy" width="1800" height="1000">
+          </div>
+          <div class="undrupe-editorial__copy u-reveal-right">
+            <p class="undrupe-eyebrow">The Undrupe edit</p>
+            <h2>Premium essentials for modern living.</h2>
+            <p>Every product at Undrupe is selected for usefulness, quality, and design. No clutter, no gimmicks — just smart essentials that improve everyday life.</p>
+            <a class="button button--primary undrupe-button" href="#">
+              Explore collections
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-left:4px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- ===== TESTIMONIALS ===== -->
+        <div class="undrupe-testimonials">
+          <div class="u-page-width">
+            <div class="undrupe-section-heading undrupe-section-heading--center u-reveal">
+              <p class="undrupe-eyebrow">What customers say</p>
+              <h2>Loved by thousands worldwide.</h2>
+            </div>
+            <div class="undrupe-testimonials__grid">
+              <div class="undrupe-testimonial u-reveal u-delay-1">
+                <p class="undrupe-testimonial__text">"The quality of everything I've ordered has been incredible. Packaging is beautiful too. This is my go-to for home essentials now."</p>
+                <div class="undrupe-testimonial__author">
+                  <div class="undrupe-testimonial__avatar">SK</div>
+                  <div>
+                    <div class="undrupe-testimonial__name">Sarah K.</div>
+                    <div class="undrupe-testimonial__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  </div>
+                </div>
+              </div>
+              <div class="undrupe-testimonial u-reveal u-delay-2">
+                <p class="undrupe-testimonial__text">"I bought the desk organizer set as a gift and it arrived beautifully packaged. My friend absolutely loved it. Will definitely order again."</p>
+                <div class="undrupe-testimonial__author">
+                  <div class="undrupe-testimonial__avatar">MT</div>
+                  <div>
+                    <div class="undrupe-testimonial__name">Michael T.</div>
+                    <div class="undrupe-testimonial__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  </div>
+                </div>
+              </div>
+              <div class="undrupe-testimonial u-reveal u-delay-3">
+                <p class="undrupe-testimonial__text">"Finally a store that curates products thoughtfully. Everything feels premium without the luxury price tag. Shipping was super fast too!"</p>
+                <div class="undrupe-testimonial__author">
+                  <div class="undrupe-testimonial__avatar">JL</div>
+                  <div>
+                    <div class="undrupe-testimonial__name">Jessica L.</div>
+                    <div class="undrupe-testimonial__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== NEWSLETTER ===== -->
+        <div class="undrupe-newsletter page-width">
+          <div class="undrupe-newsletter__inner u-reveal-scale">
+            <span class="undrupe-newsletter__kicker">Join the community</span>
+            <h2>Be the first to discover new arrivals.</h2>
+            <p>Subscribe to get exclusive access to curated drops, special offers, and insider tips on elevating your everyday.</p>
+            <form class="undrupe-newsletter__form" onsubmit="event.preventDefault(); alert('Subscribed!');">
+              <input class="undrupe-newsletter__input" type="email" placeholder="Enter your email address" required>
+              <button type="submit" class="undrupe-newsletter__submit">Subscribe</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- PREMIUM FOOTER -->
+  <footer class="preview-footer">
+    <div class="preview-footer__inner">
+      <div class="preview-footer__brand">
+        <h3>un<span>drupe</span></h3>
+        <p>Curated everyday essentials for modern living. Every product is handpicked for quality, design, and purpose.</p>
+      </div>
+      <div class="preview-footer__col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#">New Arrivals</a></li>
+          <li><a href="#">Best Sellers</a></li>
+          <li><a href="#">Collections</a></li>
+          <li><a href="#">Sale</a></li>
+        </ul>
+      </div>
+      <div class="preview-footer__col">
+        <h4>Help</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="preview-footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="preview-footer__bottom">
+      <p>&copy; 2026 Undrupe. All rights reserved.</p>
+      <div class="preview-footer__social">
+        <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Header scroll effect -->
+  <script>
+    const header = document.getElementById('previewHeader');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+  </script>
+
+  <!-- Premium JS Engine -->
+  <script src="assets/undrupe-premium.js"></script>
+</body>
+</html>

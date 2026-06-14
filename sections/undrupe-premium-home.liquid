@@ -14,20 +14,24 @@
   assign editorial_alt = section.settings.editorial_image.alt | default: shop.name | escape
 -%}
 
-<section class="undrupe-home color-{{ section.settings.color_scheme }} gradient">
+<section class="undrupe-home color-{{ section.settings.color_scheme }} gradient" id="undrupe-home">
+
+  <!-- ============================================================
+       HERO — Cinematic parallax with particles
+       ============================================================ -->
   <div class="undrupe-hero page-width">
     <div class="undrupe-hero__copy">
       {%- if section.settings.kicker != blank -%}
-        <p class="undrupe-eyebrow">{{ section.settings.kicker | escape }}</p>
+        <p class="undrupe-eyebrow u-reveal u-delay-1">{{ section.settings.kicker | escape }}</p>
       {%- endif -%}
 
       <h1 class="undrupe-hero__heading">{{ section.settings.heading }}</h1>
 
       {%- if section.settings.body != blank -%}
-        <div class="undrupe-hero__text rte">{{ section.settings.body }}</div>
+        <div class="undrupe-hero__text u-reveal u-delay-2 rte">{{ section.settings.body }}</div>
       {%- endif -%}
 
-      <div class="undrupe-hero__actions">
+      <div class="undrupe-hero__actions u-reveal u-delay-3">
         {%- if section.settings.primary_label != blank -%}
           <a
             class="button button--primary undrupe-button"
@@ -38,6 +42,7 @@
             {% endif %}
           >
             {{ section.settings.primary_label | escape }}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-left:4px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
         {%- endif -%}
         {%- if section.settings.secondary_label != blank -%}
@@ -54,7 +59,7 @@
         {%- endif -%}
       </div>
 
-      <dl class="undrupe-proof">
+      <dl class="undrupe-proof u-reveal u-delay-4">
         <div>
           <dt>Premium</dt>
           <dd>Handpicked essentials</dd>
@@ -70,7 +75,7 @@
       </dl>
     </div>
 
-    <div class="undrupe-hero__visual" aria-label="Undrupe featured product">
+    <div class="undrupe-hero__visual" aria-hidden="true">
       <div class="undrupe-hero__image-card">
         {%- if section.settings.hero_image != blank -%}
           {{
@@ -105,28 +110,54 @@
     </div>
   </div>
 
+  <!-- ============================================================
+       MARQUEE — Infinite brand scroll
+       ============================================================ -->
+  <div class="undrupe-marquee" aria-hidden="true">
+    <div class="undrupe-marquee__track">
+      {%- for i in (1..2) -%}
+        <span class="undrupe-marquee__item">Free Shipping on $50+</span>
+        <span class="undrupe-marquee__item">Premium Curated Products</span>
+        <span class="undrupe-marquee__item">30-Day Easy Returns</span>
+        <span class="undrupe-marquee__item">Eco-Conscious Packaging</span>
+        <span class="undrupe-marquee__item">Trusted by 10,000+ Customers</span>
+        <span class="undrupe-marquee__item">New Arrivals Weekly</span>
+        <span class="undrupe-marquee__item">Quality Guaranteed</span>
+        <span class="undrupe-marquee__item">Secure Checkout</span>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TRUST BAR — Glassmorphism feature cards
+       ============================================================ -->
   <div class="undrupe-trust page-width" aria-label="Store benefits">
-    <div>
+    <div class="u-reveal u-delay-1">
       <span>01</span>
       <strong>Useful first</strong>
       <p>Products chosen for real routines, not shelf clutter.</p>
     </div>
-    <div>
+    <div class="u-reveal u-delay-2">
       <span>02</span>
       <strong>Clean quality</strong>
       <p>Simple finishes, durable details, and easy gifting.</p>
     </div>
-    <div>
+    <div class="u-reveal u-delay-3">
       <span>03</span>
       <strong>Fair value</strong>
       <p>Elevated essentials without the boutique markup.</p>
     </div>
   </div>
 
+  <!-- ============================================================
+       FEATURED PRODUCTS — 3D tilt cards
+       ============================================================ -->
   <div class="undrupe-featured page-width">
-    <div class="undrupe-section-heading">
-      <p class="undrupe-eyebrow">Trending now</p>
-      <h2>{{ section.settings.featured_heading | escape }}</h2>
+    <div class="undrupe-section-heading u-reveal">
+      <div>
+        <p class="undrupe-eyebrow">Trending now</p>
+        <h2>{{ section.settings.featured_heading | escape }}</h2>
+      </div>
       {%- if section.settings.featured_link_label != blank -%}
         <a
           {% if section.settings.featured_link == blank %}
@@ -184,8 +215,35 @@
     {%- endif -%}
   </div>
 
+  <!-- ============================================================
+       STATS BAR — animated counters
+       ============================================================ -->
+  <div class="undrupe-stats page-width">
+    <div class="undrupe-stats__grid">
+      <div class="undrupe-stat u-reveal u-delay-1">
+        <span class="undrupe-stat__number" data-count-to="10000" data-count-suffix="+">0</span>
+        <span class="undrupe-stat__label">Happy Customers</span>
+      </div>
+      <div class="undrupe-stat u-reveal u-delay-2">
+        <span class="undrupe-stat__number" data-count-to="500" data-count-suffix="+">0</span>
+        <span class="undrupe-stat__label">Products Curated</span>
+      </div>
+      <div class="undrupe-stat u-reveal u-delay-3">
+        <span class="undrupe-stat__number" data-count-to="48" data-count-suffix="">0</span>
+        <span class="undrupe-stat__label">Countries Shipped</span>
+      </div>
+      <div class="undrupe-stat u-reveal u-delay-4">
+        <span class="undrupe-stat__number" data-count-to="99" data-count-suffix="%">0</span>
+        <span class="undrupe-stat__label">Satisfaction Rate</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SOLUTIONS — Interactive hover cards with glow
+       ============================================================ -->
   <div class="undrupe-solutions page-width">
-    <div class="undrupe-section-heading undrupe-section-heading--center">
+    <div class="undrupe-section-heading undrupe-section-heading--center u-reveal">
       <p class="undrupe-eyebrow">Shop by need</p>
       <h2>Everyday problems, solved cleanly.</h2>
     </div>
@@ -209,8 +267,11 @@
     </div>
   </div>
 
+  <!-- ============================================================
+       EDITORIAL — Parallax image split
+       ============================================================ -->
   <div class="undrupe-editorial page-width">
-    <div class="undrupe-editorial__image">
+    <div class="undrupe-editorial__image u-reveal-scale">
       {%- if section.settings.editorial_image != blank -%}
         {{
           section.settings.editorial_image
@@ -229,16 +290,98 @@
         >
       {%- endif -%}
     </div>
-    <div class="undrupe-editorial__copy">
+    <div class="undrupe-editorial__copy u-reveal-right">
       <p class="undrupe-eyebrow">The Undrupe edit</p>
       <h2>Premium essentials for modern living.</h2>
       <p>
         Every product at Undrupe is selected for usefulness, quality, and design. No clutter, no gimmicks—just smart essentials that improve everyday life.
       </p>
-      <a class="button button--primary undrupe-button" href="{{ routes.collections_url }}">Explore collections</a>
+      <a class="button button--primary undrupe-button" href="{{ routes.collections_url }}">
+        Explore collections
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-left:4px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
   </div>
+
+  <!-- ============================================================
+       TESTIMONIALS — Social proof with gold accent
+       ============================================================ -->
+  <div class="undrupe-testimonials">
+    <div class="u-page-width">
+      <div class="undrupe-section-heading undrupe-section-heading--center u-reveal">
+        <p class="undrupe-eyebrow">What customers say</p>
+        <h2>Loved by thousands worldwide.</h2>
+      </div>
+
+      <div class="undrupe-testimonials__grid">
+        <div class="undrupe-testimonial u-reveal u-delay-1">
+          <p class="undrupe-testimonial__text">"The quality of everything I've ordered has been incredible. Packaging is beautiful too. This is my go-to for home essentials now."</p>
+          <div class="undrupe-testimonial__author">
+            <div class="undrupe-testimonial__avatar">SK</div>
+            <div>
+              <div class="undrupe-testimonial__name">Sarah K.</div>
+              <div class="undrupe-testimonial__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="undrupe-testimonial u-reveal u-delay-2">
+          <p class="undrupe-testimonial__text">"I bought the desk organizer set as a gift and it arrived beautifully packaged. My friend absolutely loved it. Will definitely order again."</p>
+          <div class="undrupe-testimonial__author">
+            <div class="undrupe-testimonial__avatar">MT</div>
+            <div>
+              <div class="undrupe-testimonial__name">Michael T.</div>
+              <div class="undrupe-testimonial__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="undrupe-testimonial u-reveal u-delay-3">
+          <p class="undrupe-testimonial__text">"Finally a store that curates products thoughtfully. Everything feels premium without the luxury price tag. Shipping was super fast too!"</p>
+          <div class="undrupe-testimonial__author">
+            <div class="undrupe-testimonial__avatar">JL</div>
+            <div>
+              <div class="undrupe-testimonial__name">Jessica L.</div>
+              <div class="undrupe-testimonial__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       NEWSLETTER — Premium dark CTA with morphing orbs
+       ============================================================ -->
+  <div class="undrupe-newsletter page-width">
+    <div class="undrupe-newsletter__inner u-reveal-scale">
+      <span class="undrupe-newsletter__kicker">Join the community</span>
+      <h2>Be the first to discover new arrivals.</h2>
+      <p>Subscribe to get exclusive access to curated drops, special offers, and insider tips on elevating your everyday.</p>
+      {%- form 'customer', id: 'UndrupeNewsletterForm' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="undrupe-newsletter__form">
+          <input
+            class="undrupe-newsletter__input"
+            type="email"
+            name="contact[email]"
+            placeholder="Enter your email address"
+            required
+            autocomplete="email"
+            aria-label="Email address"
+          >
+          <button type="submit" class="undrupe-newsletter__submit">
+            Subscribe
+          </button>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+
 </section>
+
+<!-- Premium JS Engine -->
+<script src="{{ 'undrupe-premium.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
 {
@@ -267,19 +410,19 @@
       "type": "inline_richtext",
       "id": "heading",
       "label": "Heading",
-      "default": "Upgrade everyday living."
+      "default": "Smart essentials, beautifully chosen."
     },
     {
       "type": "richtext",
       "id": "body",
       "label": "Body",
-      "default": "<p>Discover premium home, tech, pet, and lifestyle essentials selected to simplify daily life and elevate your space.</p>"
+      "default": "<p>Undrupe brings together clever home, tech, and lifestyle finds that make daily routines feel cleaner, easier, and more intentional.</p>"
     },
     {
       "type": "text",
       "id": "primary_label",
       "label": "Primary button label",
-      "default": "Shop Collection"
+      "default": "Shop new arrivals"
     },
     {
       "type": "url",
@@ -290,7 +433,7 @@
       "type": "text",
       "id": "secondary_label",
       "label": "Secondary button label",
-      "default": "Best Sellers"
+      "default": "View all products"
     },
     {
       "type": "url",
@@ -306,7 +449,7 @@
       "type": "text",
       "id": "featured_heading",
       "label": "Featured heading",
-      "default": "Customer Favorites"
+      "default": "Most wanted this week"
     },
     {
       "type": "range",
